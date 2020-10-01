@@ -19,6 +19,7 @@ is entering an empty vehicle from the passenger side, they will be allowed to sl
 - does not interfere with other actions inside the vehicle, ie: aiming, shooting, exiting the vehicle, opening the glovebox etc
 - does not cause glitchy animations for passneger in front seat
 - entire script can be toggled with '/antishuffle' command in chat
+- standalone script, does not require essentialmode or any other
 
 # notes
 this resource requires FXServer, make sure you're up-to-date (https://github.com/citizenfx/cfx-server-data)
