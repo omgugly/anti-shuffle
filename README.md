@@ -4,7 +4,7 @@ there are a few other scripts to prevent seat shuffling. the difference is that 
 
 # description
 
-normally, when the driver of a vehicle exits that vehicle, the player occupying the front passenger-seat will shuffle over into the driver's seat and take control of the vehicle. this resource prevents that from happeing while still allowing it under certain circumstances. if a player is entering an empty vehicle from the passenger side, they will be allowed to slide into the driver's seat. also, the player can hold down the 'left-shift' key to override the script and allow themselves to slide into the driver's seat.
+normally, when the driver of a vehicle exits that vehicle, the player occupying the front passenger-seat will shuffle over into the driver's seat and take control of the vehicle. this resource prevents that from happening while still allowing it under certain circumstances. if a player is entering an empty vehicle from the passenger side, they will be allowed to slide into the driver's seat. also, the player can hold down the 'left-shift' key to override the script and allow themselves to slide into the driver's seat.
 
 # features
 
