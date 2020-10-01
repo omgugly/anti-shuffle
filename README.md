@@ -21,4 +21,7 @@ is entering an empty vehicle from the passenger side, they will be allowed to sl
 - entire script can be toggled with '/antishuffle' command in chat
 
 # notes
-credits to Ascaped for the concept/idea with their anti-seat-shuffle script (https://github.com/Ascaped/SeatShuffle)
+this resource requires FXServer, make sure you're up-to-date (https://github.com/citizenfx/cfx-server-data)
+
+# credits
+Ascaped for the concept/idea with their anti-seat-shuffle script (https://github.com/Ascaped/SeatShuffle)
