@@ -47,6 +47,8 @@ Citizen.CreateThread(function()
 					end
 					::ignoreTask::
 				end
+			else
+				if (GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, false) end
 			end
 		else
 			if (GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, false) end
