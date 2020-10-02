@@ -1,10 +1,21 @@
-local exemptTasks				= {2, 160, 197, 470}	--	CTaskExitVehicle, CTaskEnterVehicle, CTaskSetPedInVehicle, CTaskVehiclePassengerExit
-local exemptKeys				= {21}		--	Left-Shift (hold it down to temporarily allow swapping seats from passenger to driver)
-local stopPassengerShuffle		= true		--	Stop passenger shuffling to driver seat when driver seat is empty
-
 RegisterNetEvent('omgugly:toggleShuffle')
 AddEventHandler('omgugly:toggleShuffle', function()
 	stopPassengerShuffle = not stopPassengerShuffle
+	TriggerEvent('chat:addMessage', {
+		color = {63, 63, 255},
+		multiline = true,
+		args = {"Anti-Shuffle", (function() if (stopPassengerShuffle) then return "Enabled; preventing seat shuffle" else return "Disabled; allowing seat shuffle" end end)()}
+	})
+end)
+
+RegisterNetEvent('omgugly:toggleSlide')
+AddEventHandler('omgugly:toggleSlide', function()
+	allowEntrySlide = not allowEntrySlide
+	TriggerEvent('chat:addMessage', {
+		color = {63, 63, 255},
+		multiline = true,
+		args = {"Entry-Slide", (function() if (allowEntrySlide) then return "Enabled; allowing entry slide" else return "Disabled; preventing entry slide" end end)()}
+	})
 end)
 
 function areExemptKeysReleased()
@@ -25,30 +36,21 @@ function getPedSeat(p, v)
 	return -2
 end
 
-function isTaskExempt(p)
-	for i = 1, #exemptTasks do
-		if (GetIsTaskActive(p, exemptTasks[i])) then return true end
-	end
-	return false
-end
-
 Citizen.CreateThread(function()
 	while true do
 		local player = PlayerPedId()
-		if (IsPedInAnyVehicle(player, false)) then
-			if (stopPassengerShuffle) then
+		if (stopPassengerShuffle) then
+			if (not GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, true) end
+			if (IsPedInAnyVehicle(player, false)) then
 				local v = GetVehiclePedIsIn(player, 0)
+				if (GetIsTaskActive(player, 160)) and (not allowEntrySlide) then
+					if (GetSeatPedIsTryingToEnter(player) == -1) then SetPedIntoVehicle(player, v, 0) end
+				end
 				if (getPedSeat(player, v) == 0) then
-					if (isTaskExempt(player)) then SetPedConfigFlag(player, 184, false) goto ignoreTask end
-					if (areExemptKeysReleased()) then
-						SetPedConfigFlag(player, 184, true)
-					else
+					if (not areExemptKeysReleased()) then
 						if (GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, false) end
 					end
-					::ignoreTask::
 				end
-			else
-				if (GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, false) end
 			end
 		else
 			if (GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, false) end
