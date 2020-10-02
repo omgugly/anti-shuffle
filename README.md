@@ -26,7 +26,7 @@ the configuration variables are located in the 'config.lua' file. there are only
 * exemptKeys  - comma seperated list  - the key/keys the player will press to override the script when they want to slide into driver's seat manually. default: 21 [left-shit key]  - a full list of key codes can be found at: https://docs.fivem.net/docs/game-references/controls/
 
 #### update v1.2
- * added '/seat x' command. 'x' represents a number between 1 (driver's seat) and the total number of seats in the vehicle. allows the player to swap to another empty seat in the vehicle. this command is <u>disabled</u> by default.
+ * added '/seat x' command. 'x' represents a number between 1 (driver's seat) and the total number of seats in the vehicle. allows the player to swap to another empty seat in the vehicle. this command is __disabled__ by default. set 'enableSeatCommand' to 'true' to enable
  * added config.lua variable 'enableSeatCommand'. default is false. if true, enables use of the '/seat' command
 >#### update v1.1a
 > * fixed a mistake using wrong task id causing players to warp to passenger seat (thanks <a href="https://github.com/XvenDeR">XvenDeR</a> for pointing it out)
