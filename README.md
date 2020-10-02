@@ -11,6 +11,7 @@ normally, when the driver of a vehicle exits that vehicle, the player occupying 
 * does not prevent back-seat passengers from sliding over to make room for new passenger
 * entire script can be toggled with '/antishuffle' command in chat
 * '/entryslide' chat command can be used to toggle sliding to driver seat when entering empty vehicle while leaving main script intact
+* '/seat x' command allowing player to switch to any seat in the vehicle, disabled by default, must enable in config.lua to use
 * standalone script, does not require essentialmode or any other
 
 ### installation
