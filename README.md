@@ -13,6 +13,8 @@ normally, when the driver of a vehicle exits that vehicle, the player occupying 
 * '/entryslide' chat command can be used to toggle sliding to driver seat when entering empty vehicle while leaving main script intact
 * standalone script, does not require essentialmode or any other
 
+#### update v1.11
+ * fixed a mistake using wrong task id causing players to warp to passenger seat
 #### update v1.1
  * configuration variables moved to config.lua
  * per request - new default functionality blocks all attempts to enter driver's seat from passenger (even when the player is attempting to enter an empty vehicle from passenger side)
