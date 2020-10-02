@@ -43,12 +43,17 @@ Citizen.CreateThread(function()
 			if (not GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, true) end
 			if (IsPedInAnyVehicle(player, false)) then
 				local v = GetVehiclePedIsIn(player, 0)
-				if (GetIsTaskActive(player, 160)) and (not allowEntrySlide) then
-					if (GetSeatPedIsTryingToEnter(player) == -1) then SetPedIntoVehicle(player, v, 0) end
-				end
 				if (getPedSeat(player, v) == 0) then
 					if (not areExemptKeysReleased()) then
 						if (GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, false) end
+					end
+				end
+				if (GetIsTaskActive(player, 165)) and (not allowEntrySlide) then
+					if (GetSeatPedIsTryingToEnter(player) == -1) then
+						if (GetPedConfigFlag(player, 184, 1)) then
+							SetPedIntoVehicle(player, v, 0)
+							SetVehicleCloseDoorDeferedAction(v, 0)
+						end
 					end
 				end
 			end
