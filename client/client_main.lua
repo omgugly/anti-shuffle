@@ -1,21 +1,77 @@
-RegisterNetEvent('omgugly:toggleShuffle')
-AddEventHandler('omgugly:toggleShuffle', function()
-	stopPassengerShuffle = not stopPassengerShuffle
-	TriggerEvent('chat:addMessage', {
-		color = {63, 63, 255},
-		multiline = true,
-		args = {"Anti-Shuffle", (function() if (stopPassengerShuffle) then return "Enabled; preventing seat shuffle" else return "Disabled; allowing seat shuffle" end end)()}
-	})
-end)
+Citizen.CreateThread(function()
+	RegisterNetEvent('omgugly:toggleShuffle')
+	AddEventHandler('omgugly:toggleShuffle', function()
+		stopPassengerShuffle = not stopPassengerShuffle
+		TriggerEvent('chat:addMessage', {
+			color = {63, 63, 255},
+			multiline = true,
+			args = {"Anti-Shuffle", (function() if (stopPassengerShuffle) then return "Enabled; preventing seat shuffle" else return "Disabled; allowing seat shuffle" end end)()}
+		})
+	end)
 
-RegisterNetEvent('omgugly:toggleSlide')
-AddEventHandler('omgugly:toggleSlide', function()
-	allowEntrySlide = not allowEntrySlide
-	TriggerEvent('chat:addMessage', {
-		color = {63, 63, 255},
-		multiline = true,
-		args = {"Entry-Slide", (function() if (allowEntrySlide) then return "Enabled; allowing entry slide" else return "Disabled; preventing entry slide" end end)()}
-	})
+	RegisterNetEvent('omgugly:toggleSlide')
+	AddEventHandler('omgugly:toggleSlide', function()
+		allowEntrySlide = not allowEntrySlide
+		TriggerEvent('chat:addMessage', {
+			color = {63, 63, 255},
+			multiline = true,
+			args = {"Entry-Slide", (function() if (allowEntrySlide) then return "Enabled; allowing entry slide" else return "Disabled; preventing entry slide" end end)()}
+		})
+	end)
+	
+	if (enableSeatCommand) then
+		RegisterNetEvent('omgugly:seat')
+		AddEventHandler('omgugly:seat', function(seat)
+			seat = tonumber(seat) - 2 or 0
+			local player, v = PlayerPedId(), 0
+			if (seat < -1) then TriggerEvent('chat:addMessage', {
+				color = {63, 63, 255},
+				multiline = true,
+				args = {"Seat", "Invalid seat number"}
+			}) goto complete end
+			if (IsPedInAnyVehicle(player, 1)) then
+				v = GetVehiclePedIsIn(player, 0)
+				if (seat == getPedSeat(player, v)) then TriggerEvent('chat:addMessage', {
+					color = {63, 63, 255},
+					multiline = true,
+					args = {"Seat", "You are already in that seat"}
+				}) goto complete end
+				if not (AreAnyVehicleSeatsFree(v)) then goto noseat end
+				if (seat <= (GetVehicleModelNumberOfSeats(GetEntityModel(v)) - 2)) then
+					if (IsVehicleSeatFree(v, seat)) then
+						SetPedIntoVehicle(player, v, seat)
+						goto complete
+					else goto fullseat end
+				else TriggerEvent('chat:addMessage', {
+					color = {63, 63, 255},
+					multiline = true,
+					args = {"Seat", "Invalid seat number"}
+				}) end
+				goto complete
+				::fullseat::
+				TriggerEvent('chat:addMessage', {
+					color = {63, 63, 255},
+					multiline = true,
+					args = {"Seat", "That seat is occupied"}
+				})
+				goto complete
+				::noseat::
+				TriggerEvent('chat:addMessage', {
+					color = {63, 63, 255},
+					multiline = true,
+					args = {"Seat", "There are no free seats"}
+				})
+				goto complete
+			else
+				TriggerEvent('chat:addMessage', {
+					color = {63, 63, 255},
+					multiline = true,
+					args = {"Seat", "You are not in a vehicle"}
+				})
+			end
+			::complete::
+		end)
+	end
 end)
 
 function areExemptKeysReleased()

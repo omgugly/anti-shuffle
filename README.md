@@ -13,12 +13,15 @@ normally, when the driver of a vehicle exits that vehicle, the player occupying 
 * '/entryslide' chat command can be used to toggle sliding to driver seat when entering empty vehicle while leaving main script intact
 * standalone script, does not require essentialmode or any other
 
-#### update v1.11
+#### update v1.2
+ * added '/seat x' command. 'x' represents a number between 1 (driver's seat) and the total number of seats in the vehicle. allows the player to swap to another empty seat in the vehicle. this command is <u>disabled</u> by default.
+ * added config.lua variable 'enableSeatCommand'. default is false. if true, enables use of the '/seat' command
+#### update v1.1a
  * fixed a mistake using wrong task id causing players to warp to passenger seat (thanks <a href="https://github.com/XvenDeR">XvenDeR</a> for pointing it out)
 #### update v1.1
  * configuration variables moved to config.lua
  * per request - new default functionality blocks all attempts to enter driver's seat from passenger (even when the player is attempting to enter an empty vehicle from passenger side)
- * new config variable 'allowEntrySlide' can be changed to modify this behavior; default value is false (preventing slide across when entering from passenger side)
+ * new config.lua variable 'allowEntrySlide'. can be changed to modify this behavior; default value is false (preventing slide across when entering from passenger side)
  * new chat command '/entryslide' can be used to toggle 'allowEntrySlide' setting in-game
  * added chat responses to /antishuffle and /entryslide commands, you can easily change this to pNotify or whatever notification resource you use
  * code further simplified
@@ -32,6 +35,7 @@ normally, when the driver of a vehicle exits that vehicle, the player occupying 
 the configuration variables are located in the 'config.lua' file. there are only 3:
 * stopPassengerShuffle  - true/false  - toggle the whole script on/off. default: true; [true = on / false = off]
 * allowEntrySlide - true/false  - toggle allowing players entering empty vehicle to slide from passenger side into driver's seat. default: false; [true = allow / false = prevent]
+* enableSeatCommand - true/false - toggle use of the '/seat' command. default: false; [true = enable '/seat' / false = disable '/seat']
 * exemptKeys  - comma seperated list  - the key/keys the player will press to override the script when they want to slide into driver's seat manually. default: 21 [left-shit key]  - a full list of key codes can be found at: https://docs.fivem.net/docs/game-references/controls/
 
 ### notes
