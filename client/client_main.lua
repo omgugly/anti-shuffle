@@ -22,54 +22,12 @@ Citizen.CreateThread(function()
 	if (enableSeatCommand) then
 		RegisterNetEvent('omgugly:seat')
 		AddEventHandler('omgugly:seat', function(seat)
-			seat = tonumber(seat) - 2 or 0
-			local player, v = PlayerPedId(), 0
-			if (seat < -1) then TriggerEvent('chat:addMessage', {
-				color = {63, 63, 255},
-				multiline = true,
-				args = {"Seat", "Invalid seat number"}
-			}) goto complete end
-			if (IsPedInAnyVehicle(player, 1)) then
-				v = GetVehiclePedIsIn(player, 0)
-				if (seat == getPedSeat(player, v)) then TriggerEvent('chat:addMessage', {
-					color = {63, 63, 255},
-					multiline = true,
-					args = {"Seat", "You are already in that seat"}
-				}) goto complete end
-				if not (AreAnyVehicleSeatsFree(v)) then goto noseat end
-				if (seat <= (GetVehicleModelNumberOfSeats(GetEntityModel(v)) - 2)) then
-					if (IsVehicleSeatFree(v, seat)) then
-						SetPedIntoVehicle(player, v, seat)
-						goto complete
-					else goto fullseat end
-				else TriggerEvent('chat:addMessage', {
-					color = {63, 63, 255},
-					multiline = true,
-					args = {"Seat", "Invalid seat number"}
-				}) end
-				goto complete
-				::fullseat::
-				TriggerEvent('chat:addMessage', {
-					color = {63, 63, 255},
-					multiline = true,
-					args = {"Seat", "That seat is occupied"}
-				})
-				goto complete
-				::noseat::
-				TriggerEvent('chat:addMessage', {
-					color = {63, 63, 255},
-					multiline = true,
-					args = {"Seat", "There are no free seats"}
-				})
-				goto complete
-			else
-				TriggerEvent('chat:addMessage', {
-					color = {63, 63, 255},
-					multiline = true,
-					args = {"Seat", "You are not in a vehicle"}
-				})
+			local player = PlayerPedId()
+			local v = GetVehiclePedIsIn(player, false)
+			local t = GetPedInVehicleSeat(v, -1)
+			if v ~= 0 and t ~= 0 then
+				TaskShuffleToNextVehicleSeat(player, v)
 			end
-			::complete::
 		end)
 	end
 end)
