@@ -1,12 +1,15 @@
 # anti-shuffle for fivem
-there are a few other scripts to prevent seat shuffling. the difference is that this script uses the native ped config flags to disable seat shuffling instead of trying to catch and cancel the player attempts to shuffle seats.
+there are a few other scripts to prevent seat shuffling. the difference is that this script uses the native ped config flags to disable seat shuffling instead of trying to catch and cancel the player attempts to shuffle seats. this script includes various other vehicle seat related functions like entering a vehicle straight into the rear seat or shuffling between any two neighboring seats with a key-press, check the features below for a full list and read the configuration section for setup intructions
 
 ### description
 normally, when the driver of a vehicle exits that vehicle, the player occupying the front passenger-seat will shuffle over into the driver's seat and take control of the vehicle. this resource prevents that from happening. the player can press the 'left-shift' key to override the script when they want to slide into the driver's seat. people requested that the script block players from sliding into driver's seat even if they were entering an empty vehicle, so the default behavior has been changed to reflect this. you can toggle this setting in the config.lua file
 
+#### new
+* optionally, players can press 'left-shift' (default key) to shuffle between any two neighboring seats with 'allowKeyShuffle' set to 'true' in config.lua
+* player can enter vehicle directly into rear seats (for vehicles with > 2 seats) by pressing 'B' (default key) when near vehicle
 ### features
 * prevents passenger in front seat from sliding into unoccupied driver's seat
-* player can hold 'left-shift' key to override the script when they want to slide into driver's seat
+* player can press 'left-shift' key (default key) to override the script when they want to slide into driver's seat from passenger manually
 * does not interrupt other actions inside the vehicle, ie: aiming, shooting, exiting the vehicle etc
 * does not prevent back-seat passengers from sliding over to make room for new passenger
 * entire script can be toggled with '/antishuffle' command in chat
@@ -20,15 +23,20 @@ normally, when the driver of a vehicle exits that vehicle, the player occupying 
 * add 'ensure anti-shuffle' to your server.cfg file
 
 ### configuration
-the configuration variables are located in the 'config.lua' file. there are only 3:
-* stopPassengerShuffle  - true/false  - toggle the whole script on/off. default: true; [true = on / false = off]
-* allowEntrySlide - true/false  - toggle allowing players entering empty vehicle to slide from passenger side into driver's seat. default: false; [true = allow / false = prevent]
-* enableSeatCommand - true/false - toggle use of the '/seat' command. default: false; [true = enable '/seat' / false = disable '/seat']
-* exemptKeys  - comma seperated list  - the key/keys the player will press to override the script when they want to slide into driver's seat manually. default: 21 [left-shit key]  - a full list of key codes can be found at: https://docs.fivem.net/docs/game-references/controls/
+the configuration variables are located in the 'config.lua' file. there are 6 total:
+* __stopPassengerShuffle__  - true/false  - toggle the whole script on/off. __default: true__; [true = on / false = off]
+* __allowEntrySlide__ - true/false  - toggle allowing players entering empty vehicle to slide from passenger side into driver's seat. __default: false__; [true = allow / false = prevent]
+* __allowKeyShuffle__ - true/false - toggle allowing players to use any of the 'exemptKeys' set to shuffle between any two neighboring seats. __default: false__; [true = allow / false = prevent]
+* __enableSeatCommand__ - true/false - toggle use of the '/seat' command. __default: false__; [true = enable '/seat' / false = disable '/seat']
+* __enterRearSeatKey__ - the key that will be used to enter the vehicle's rear seat from outside when nearby. __default: 29__ [B]
+* __exemptKeys__  - comma seperated list  - the key/keys the player will press to override the script when they want to slide into driver's seat manually. __default: 21__ [left-shift]  - a full list of key codes can be found at: https://docs.fivem.net/docs/game-references/controls/
 
-#### update v1.2
- * added '/seat x' command. 'x' represents a number between 1 (driver's seat) and the total number of seats in the vehicle. allows the player to swap to another empty seat in the vehicle. this command is __disabled__ by default. set 'enableSeatCommand' to 'true' to enable
- * added config.lua variable 'enableSeatCommand'. default is false. if true, enables use of the '/seat' command
+#### update 1.3
+ * added config.lua variable 'allowKeyShuffle'. default is false. if true, pressing 'left-shift' will allow players to shuffle from __any__ seat into the __neighboring__ seat, not just from passenger to driver; ie from rear left seat into rear right seat.
+ * added ability to enter rear seat directly from outside by pressing 'B' when near a vehicle
+>#### update v1.2
+> * added '/seat x' command. 'x' represents a number between 1 (driver's seat) and the total number of seats in the vehicle. allows the player to swap to another empty seat in the vehicle. this command is __disabled__ by default. set 'enableSeatCommand' to 'true' to enable
+> * added config.lua variable 'enableSeatCommand'. default is false. if true, enables use of the '/seat' command
 >#### update v1.1a
 > * fixed a mistake using wrong task id causing players to warp to passenger seat (thanks <a href="https://github.com/XvenDeR">XvenDeR</a> for pointing it out)
 >#### update v1.1

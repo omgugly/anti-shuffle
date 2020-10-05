@@ -22,7 +22,7 @@ Citizen.CreateThread(function()
 	if (enableSeatCommand) then
 		RegisterNetEvent('omgugly:seat')
 		AddEventHandler('omgugly:seat', function(seat)
-			seat = tonumber(seat) - 2 or 0
+			seat = tonumber(seat) - 2 or -2
 			local player, v = PlayerPedId(), 0
 			if (seat < -1) then TriggerEvent('chat:addMessage', {
 				color = {63, 63, 255},
@@ -75,6 +75,7 @@ Citizen.CreateThread(function()
 end)
 
 function areExemptKeysReleased()
+	if (#exemptKeys == 0) then return false end
 	local keys = 0
 	for i = 1, #exemptKeys do
 		if (IsControlReleased(0, exemptKeys[i])) and (IsInputDisabled(2)) and (not isDead) then keys = keys + 1 end
@@ -83,13 +84,63 @@ function areExemptKeysReleased()
 	else return false end
 end
 
+function enterRearSeat(p)
+	if (IsPedInAnyVehicle(player, 1)) then goto complete end
+	local v = getVehicleInFront(p)
+	if (v ~= 0) then
+		local entityHead, playerHead, camHead = GetEntityHeading(v), GetEntityHeading(p), normalizeAngle(GetGameplayCamRelativeHeading())
+		local angleBetween = getAngleBetweenForwardVectors(GetEntityForwardVector(p), GetEntityForwardVector(v))
+		local angleLeft, angleRight = normalizeAngle(playerHead + angleBetween), normalizeAngle(playerHead - angleBetween)
+		local seatsMax = GetVehicleModelNumberOfSeats(GetEntityModel(v))
+		if (roundFloat(angleLeft) == roundFloat(entityHead)) then
+			if (seatsMax > 2) and (IsVehicleSeatFree(v, 1)) then
+				TaskEnterVehicle(p, v, -1, 1, 1.0, 1, 0)
+			end
+		elseif (roundFloat(angleRight) == roundFloat(entityHead)) then
+			if (seatsMax > 2) and (IsVehicleSeatFree(v, 2)) then
+				TaskEnterVehicle(p, v, -1, 2, 1.0, 1, 0)
+			end
+		end
+	end
+	::complete::
+end
+
+function getAngleBetweenForwardVectors(v1, v2)
+	return math.deg(math.acos(getDotProduct(v1, v2) / (getMagnitude(v1) * getMagnitude(v2))))
+end
+
+function getDotProduct(v1, v2)
+	return (v1.x * v2.x) + (v1.y * v2.y) + (v1.z * v2.z)
+end
+
+function getMagnitude(x)
+	return math.sqrt((x.x * x.x) + (x.y * x.y) + (x.z * x.z))
+end
+
 function getPedSeat(p, v)
-	local seats = GetVehicleModelNumberOfSeats(v)
+	local seats = GetVehicleModelNumberOfSeats(GetEntityModel(v))
 	for i = -1, seats do
 		local t = GetPedInVehicleSeat(v, i)
 		if (t == p) then return i end
 	end
 	return -2
+end
+
+function getVehicleInFront(p)
+	local pos1, pos2 = GetEntityCoords(p), GetOffsetFromEntityInWorldCoords(p, 0.0, 7.0, 0.0)
+	local ray = StartShapeTestRay(pos1.x, pos1.y, pos1.z, pos2.x, pos2.y, pos2.z, 2, p, 0)
+	local ret, hit, endPos, hitPos, entityHit = GetShapeTestResult(ray)
+	return entityHit
+end
+
+function normalizeAngle(a)
+	while (a < 0) do a = a + 360 end
+	while (a > 360) do a = a - 360 end
+	return a
+end
+
+function roundFloat(num, numDecimalPlaces)
+	return tonumber(string.format("%." .. (numDecimalPlaces or 0) .. "f", num))
 end
 
 Citizen.CreateThread(function()
@@ -99,9 +150,15 @@ Citizen.CreateThread(function()
 			if (not GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, true) end
 			if (IsPedInAnyVehicle(player, false)) then
 				local v = GetVehiclePedIsIn(player, 0)
-				if (getPedSeat(player, v) == 0) then
-					if (not areExemptKeysReleased()) then
-						if (GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, false) end
+				if (not areExemptKeysReleased()) then
+					if (GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, false) end
+					if (allowKeyShuffle) then
+						local seatCurrent, seatTarget = getPedSeat(player, v), nil
+						if (seatCurrent == -1) or (seatCurrent == 1) then seatTarget = seatCurrent + 1
+						else seatTarget = seatCurrent - 1 end
+						if (seatCurrent ~= 0) and (GetVehicleModelNumberOfSeats(GetEntityModel(v)) >= seatTarget + 2) then
+							TaskShuffleToNextVehicleSeat(player, v)
+						end
 					end
 				end
 				if (GetIsTaskActive(player, 165)) and (not allowEntrySlide) then
@@ -116,6 +173,7 @@ Citizen.CreateThread(function()
 		else
 			if (GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, false) end
 		end
+		if (IsControlJustPressed(0, enterRearSeatKey)) and (IsInputDisabled(2)) then enterRearSeat(player) end
 		Citizen.Wait(0)
 	end
 end)
