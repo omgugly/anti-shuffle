@@ -88,7 +88,7 @@ function enterRearSeat(p)
 	if (IsPedInAnyVehicle(player, 1)) then goto complete end
 	local v = getVehicleInFront(p)
 	if (v ~= 0) then
-		local entityHead, playerHead, camHead = GetEntityHeading(v), GetEntityHeading(p), normalizeAngle(GetGameplayCamRelativeHeading())
+		local entityHead, playerHead = GetEntityHeading(v), GetEntityHeading(p)
 		local angleBetween = getAngleBetweenForwardVectors(GetEntityForwardVector(p), GetEntityForwardVector(v))
 		local angleLeft, angleRight = normalizeAngle(playerHead + angleBetween), normalizeAngle(playerHead - angleBetween)
 		local seatsMax = GetVehicleModelNumberOfSeats(GetEntityModel(v))
