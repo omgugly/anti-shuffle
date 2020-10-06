@@ -157,7 +157,7 @@ Citizen.CreateThread(function()
 						if (seatCurrent == -1) or (seatCurrent == 1) then seatTarget = seatCurrent + 1
 						else seatTarget = seatCurrent - 1 end
 						if (seatCurrent ~= 0) and (GetVehicleModelNumberOfSeats(GetEntityModel(v)) >= seatTarget + 2) then
-							TaskShuffleToNextVehicleSeat(player, v)
+							if (IsVehicleSeatFree(v, seatTarget)) then TaskShuffleToNextVehicleSeat(player, v) end
 						end
 					end
 				end
