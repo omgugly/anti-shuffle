@@ -159,6 +159,7 @@ Citizen.CreateThread(function()
 						if (seatCurrent ~= 0) and (GetVehicleModelNumberOfSeats(GetEntityModel(v)) >= seatTarget + 2) then
 							if (IsVehicleSeatFree(v, seatTarget)) then TaskShuffleToNextVehicleSeat(player, v) end
 						end
+						Citizen.Wait(2000)
 					end
 				end
 				if (GetIsTaskActive(player, 165)) and (not allowEntrySlide) then
