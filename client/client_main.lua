@@ -1,3 +1,5 @@
+local isShuffling = false	-- please do not change this, it is internal to the script and not a config variable
+
 Citizen.CreateThread(function()
 	RegisterNetEvent('omgugly:toggleShuffle')
 	AddEventHandler('omgugly:toggleShuffle', function()
@@ -152,22 +154,27 @@ Citizen.CreateThread(function()
 				local v = GetVehiclePedIsIn(player, 0)
 				if (not areExemptKeysReleased()) then
 					if (GetPedConfigFlag(player, 184, 1)) then SetPedConfigFlag(player, 184, false) end
-					if (allowKeyShuffle) then
+					if (allowKeyShuffle) and (not isShuffling) then
 						local seatCurrent, seatTarget = getPedSeat(player, v), nil
-						if (seatCurrent == -1) or (seatCurrent == 1) then seatTarget = seatCurrent + 1
+						if ((seatCurrent % 2) == 1) then seatTarget = seatCurrent + 1
 						else seatTarget = seatCurrent - 1 end
 						if (seatCurrent ~= 0) and (GetVehicleModelNumberOfSeats(GetEntityModel(v)) >= seatTarget + 2) then
 							if (IsVehicleSeatFree(v, seatTarget)) then TaskShuffleToNextVehicleSeat(player, v) end
 						end
 					end
 				end
-				if (GetIsTaskActive(player, 165)) and (not allowEntrySlide) then
-					if (GetSeatPedIsTryingToEnter(player) == -1) then
-						if (GetPedConfigFlag(player, 184, 1)) then
-							SetPedIntoVehicle(player, v, 0)
-							SetVehicleCloseDoorDeferedAction(v, 0)
+				if (GetIsTaskActive(player, 165)) then
+					isShuffling = true
+					if (not allowEntrySlide) then
+						if (GetSeatPedIsTryingToEnter(player) == -1) then
+							if (GetPedConfigFlag(player, 184, 1)) then
+								SetPedIntoVehicle(player, v, 0)
+								SetVehicleCloseDoorDeferedAction(v, 0)
+							end
 						end
 					end
+				else
+					isShuffling = false
 				end
 			end
 		else

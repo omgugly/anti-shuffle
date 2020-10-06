@@ -31,9 +31,11 @@ the configuration variables are located in the 'config.lua' file. there are 6 to
 * __enterRearSeatKey__ - the key that will be used to enter the vehicle's rear seat from outside when nearby. __default: 29__ [B]
 * __exemptKeys__  - comma seperated list  - the key/keys the player will press to override the script when they want to slide into driver's seat manually. __default: 21__ [left-shift]  - a full list of key codes can be found at: https://docs.fivem.net/docs/game-references/controls/
 
-#### update 1.3
+#### update 1.3a
  * added config.lua variable 'allowKeyShuffle'. default is false. if true, pressing 'left-shift' will allow players to shuffle from __any__ seat into the __neighboring__ seat, not just from passenger to driver; ie from rear left seat into rear right seat. feature suggested by <a href="https://github.com/XvenDeR">XvenDeR</a>
  * added ability to enter rear seat directly from outside by pressing 'B' when near a vehicle
+ * added 'isShuffling' boolean to check whether a shuffle was already in progress before starting a new shuffle. suggested by <a href="https://github.com/XvenDeR">XvenDeR</a>
+ * selecting seat target during shuffle now uses a modulo to determine target, allowing shuffle to work properly on vehicles with seats > 4
 >#### update v1.2
 > * added '/seat x' command. 'x' represents a number between 1 (driver's seat) and the total number of seats in the vehicle. allows the player to swap to another empty seat in the vehicle. this command is __disabled__ by default. set 'enableSeatCommand' to 'true' to enable
 > * added config.lua variable 'enableSeatCommand'. default is false. if true, enables use of the '/seat' command
